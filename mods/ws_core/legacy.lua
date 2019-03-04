@@ -15,12 +15,6 @@ function ws_core.spawn_falling_node(p, nodename)
 	spawn_falling_node(p, nodename)
 end
 
--- Liquids
-WATER_ALPHA = minetest.registered_nodes["ws_core:water_source"].alpha
-WATER_VISC = minetest.registered_nodes["ws_core:water_source"].liquid_viscosity
-LAVA_VISC = minetest.registered_nodes["ws_core:lava_source"].liquid_viscosity
-LIGHT_MAX = ws_core.LIGHT_MAX
-
 -- Formspecs
 ws_core.gui_suvival_form = ws_core.gui_survival_form
 
@@ -34,9 +28,6 @@ if minetest.get_modpath("player_api") then
 	ws_core.player_set_textures      = player_api.set_textures
 	ws_core.player_set_animation     = player_api.set_animation
 end
-
--- Chests
-ws_core.register_chest = ws_core.chest.register_chest
 
 -- Check for a volume intersecting protection
 function ws_core.intersects_protection(minp, maxp, player_name, interval)

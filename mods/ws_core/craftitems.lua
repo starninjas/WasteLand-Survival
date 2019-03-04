@@ -1,14 +1,14 @@
--- mods/default/craftitems.lua
+-- mods/ws_core/craftitems.lua
 
-minetest.register_craftitem("default:stick", {
+minetest.register_craftitem("ws_core:stick", {
 	description = "Stick",
-	inventory_image = "default_stick.png",
+	inventory_image = "ws_core_stick.png",
 	groups = {stick = 1, flammable = 2},
 })
 
-minetest.register_craftitem("default:paper", {
+minetest.register_craftitem("ws_core:paper", {
 	description = "Paper",
-	inventory_image = "default_paper.png",
+	inventory_image = "ws_core_paper.png",
 	groups = {flammable = 3},
 })
 
@@ -50,16 +50,16 @@ local function book_on_use(itemstack, user)
 
 	local formspec
 	if owner == player_name then
-		formspec = "size[8,8]" .. default.gui_bg ..
-			default.gui_bg_img ..
+		formspec = "size[8,8]" .. ws_core.gui_bg ..
+			ws_core.gui_bg_img ..
 			"field[0.5,1;7.5,0;title;Title:;" ..
 				minetest.formspec_escape(title) .. "]" ..
 			"textarea[0.5,1.5;7.5,7;text;Contents:;" ..
 				minetest.formspec_escape(text) .. "]" ..
 			"button_exit[2.5,7.5;3,1;save;Save]"
 	else
-		formspec = "size[8,8]" .. default.gui_bg ..
-			default.gui_bg_img ..
+		formspec = "size[8,8]" .. ws_core.gui_bg ..
+			ws_core.gui_bg_img ..
 			"label[0.5,0.5;by " .. owner .. "]" ..
 			"tablecolumns[color;text]" ..
 			"tableoptions[background=#00000000;highlight=#00000000;border=false]" ..
@@ -71,7 +71,7 @@ local function book_on_use(itemstack, user)
 			"button[4.9,7.6;0.8,0.8;book_next;>]"
 	end
 
-	minetest.show_formspec(player_name, "default:book", formspec)
+	minetest.show_formspec(player_name, "ws_core:book", formspec)
 	return itemstack
 end
 
@@ -79,20 +79,20 @@ local max_text_size = 10000
 local max_title_size = 80
 local short_title_size = 35
 minetest.register_on_player_receive_fields(function(player, formname, fields)
-	if formname ~= "default:book" then return end
+	if formname ~= "ws_core:book" then return end
 	local inv = player:get_inventory()
 	local stack = player:get_wielded_item()
 
 	if fields.save and fields.title and fields.text
 			and fields.title ~= "" and fields.text ~= "" then
 		local new_stack, data
-		if stack:get_name() ~= "default:book_written" then
+		if stack:get_name() ~= "ws_core:book_written" then
 			local count = stack:get_count()
 			if count == 1 then
-				stack:set_name("default:book_written")
+				stack:set_name("ws_core:book_written")
 			else
 				stack:set_count(count - 1)
-				new_stack = ItemStack("default:book_written")
+				new_stack = ItemStack("ws_core:book_written")
 			end
 		else
 			data = stack:get_meta():to_table().fields
@@ -156,16 +156,16 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	player:set_wielded_item(stack)
 end)
 
-minetest.register_craftitem("default:book", {
+minetest.register_craftitem("ws_core:book", {
 	description = "Book",
-	inventory_image = "default_book.png",
+	inventory_image = "ws_core_book.png",
 	groups = {book = 1, flammable = 3},
 	on_use = book_on_use,
 })
 
-minetest.register_craftitem("default:book_written", {
+minetest.register_craftitem("ws_core:book_written", {
 	description = "Book With Text",
-	inventory_image = "default_book_written.png",
+	inventory_image = "ws_core_book_written.png",
 	groups = {book = 1, not_in_creative_inventory = 1, flammable = 3},
 	stack_max = 1,
 	on_use = book_on_use,
@@ -173,19 +173,19 @@ minetest.register_craftitem("default:book_written", {
 
 minetest.register_craft({
 	type = "shapeless",
-	output = "default:book_written",
-	recipe = {"default:book", "default:book_written"}
+	output = "ws_core:book_written",
+	recipe = {"ws_core:book", "ws_core:book_written"}
 })
 
 minetest.register_on_craft(function(itemstack, player, old_craft_grid, craft_inv)
-	if itemstack:get_name() ~= "default:book_written" then
+	if itemstack:get_name() ~= "ws_core:book_written" then
 		return
 	end
 
 	local original
 	local index
 	for i = 1, player:get_inventory():get_size("craft") do
-		if old_craft_grid[i]:get_name() == "default:book_written" then
+		if old_craft_grid[i]:get_name() == "ws_core:book_written" then
 			original = old_craft_grid[i]
 			index = i
 		end
@@ -200,9 +200,9 @@ minetest.register_on_craft(function(itemstack, player, old_craft_grid, craft_inv
 	craft_inv:set_stack("craft", index, original)
 end)
 
-minetest.register_craftitem("default:skeleton_key", {
+minetest.register_craftitem("ws_core:skeleton_key", {
 	description = "Skeleton Key",
-	inventory_image = "default_key_skeleton.png",
+	inventory_image = "ws_core_key_skeleton.png",
 	groups = {key = 1},
 	on_use = function(itemstack, user, pointed_thing)
 		if pointed_thing.type ~= "node" then
@@ -237,7 +237,7 @@ minetest.register_craftitem("default:skeleton_key", {
 			itemstack:take_item()
 
 			-- finish and return the new key
-			local new_stack = ItemStack("default:key")
+			local new_stack = ItemStack("ws_core:key")
 			local meta = new_stack:get_meta()
 			meta:set_string("secret", secret)
 			meta:set_string("description", "Key to "..user:get_player_name().."'s "
@@ -256,88 +256,88 @@ minetest.register_craftitem("default:skeleton_key", {
 	end
 })
 
-minetest.register_craftitem("default:coal_lump", {
+minetest.register_craftitem("ws_core:coal_lump", {
 	description = "Coal Lump",
-	inventory_image = "default_coal_lump.png",
+	inventory_image = "ws_core_coal_lump.png",
 	groups = {coal = 1, flammable = 1}
 })
 
-minetest.register_craftitem("default:iron_lump", {
+minetest.register_craftitem("ws_core:iron_lump", {
 	description = "Iron Lump",
-	inventory_image = "default_iron_lump.png",
+	inventory_image = "ws_core_iron_lump.png",
 })
 
-minetest.register_craftitem("default:copper_lump", {
+minetest.register_craftitem("ws_core:copper_lump", {
 	description = "Copper Lump",
-	inventory_image = "default_copper_lump.png",
+	inventory_image = "ws_core_copper_lump.png",
 })
 
-minetest.register_craftitem("default:tin_lump", {
+minetest.register_craftitem("ws_core:tin_lump", {
 	description = "Tin Lump",
-	inventory_image = "default_tin_lump.png",
+	inventory_image = "ws_core_tin_lump.png",
 })
 
-minetest.register_craftitem("default:mese_crystal", {
+minetest.register_craftitem("ws_core:mese_crystal", {
 	description = "Mese Crystal",
-	inventory_image = "default_mese_crystal.png",
+	inventory_image = "ws_core_mese_crystal.png",
 })
 
-minetest.register_craftitem("default:gold_lump", {
+minetest.register_craftitem("ws_core:gold_lump", {
 	description = "Gold Lump",
-	inventory_image = "default_gold_lump.png",
+	inventory_image = "ws_core_gold_lump.png",
 })
 
-minetest.register_craftitem("default:diamond", {
+minetest.register_craftitem("ws_core:diamond", {
 	description = "Diamond",
-	inventory_image = "default_diamond.png",
+	inventory_image = "ws_core_diamond.png",
 })
 
-minetest.register_craftitem("default:clay_lump", {
+minetest.register_craftitem("ws_core:clay_lump", {
 	description = "Clay Lump",
-	inventory_image = "default_clay_lump.png",
+	inventory_image = "ws_core_clay_lump.png",
 })
 
-minetest.register_craftitem("default:steel_ingot", {
+minetest.register_craftitem("ws_core:steel_ingot", {
 	description = "Steel Ingot",
-	inventory_image = "default_steel_ingot.png",
+	inventory_image = "ws_core_steel_ingot.png",
 })
 
-minetest.register_craftitem("default:copper_ingot", {
+minetest.register_craftitem("ws_core:copper_ingot", {
 	description = "Copper Ingot",
-	inventory_image = "default_copper_ingot.png",
+	inventory_image = "ws_core_copper_ingot.png",
 })
 
-minetest.register_craftitem("default:tin_ingot", {
+minetest.register_craftitem("ws_core:tin_ingot", {
 	description = "Tin Ingot",
-	inventory_image = "default_tin_ingot.png",
+	inventory_image = "ws_core_tin_ingot.png",
 })
 
-minetest.register_craftitem("default:bronze_ingot", {
+minetest.register_craftitem("ws_core:bronze_ingot", {
 	description = "Bronze Ingot",
-	inventory_image = "default_bronze_ingot.png",
+	inventory_image = "ws_core_bronze_ingot.png",
 })
 
-minetest.register_craftitem("default:gold_ingot", {
+minetest.register_craftitem("ws_core:gold_ingot", {
 	description = "Gold Ingot",
-	inventory_image = "default_gold_ingot.png"
+	inventory_image = "ws_core_gold_ingot.png"
 })
 
-minetest.register_craftitem("default:mese_crystal_fragment", {
+minetest.register_craftitem("ws_core:mese_crystal_fragment", {
 	description = "Mese Crystal Fragment",
-	inventory_image = "default_mese_crystal_fragment.png",
+	inventory_image = "ws_core_mese_crystal_fragment.png",
 })
 
-minetest.register_craftitem("default:clay_brick", {
+minetest.register_craftitem("ws_core:clay_brick", {
 	description = "Clay Brick",
-	inventory_image = "default_clay_brick.png",
+	inventory_image = "ws_core_clay_brick.png",
 })
 
-minetest.register_craftitem("default:obsidian_shard", {
+minetest.register_craftitem("ws_core:obsidian_shard", {
 	description = "Obsidian Shard",
-	inventory_image = "default_obsidian_shard.png",
+	inventory_image = "ws_core_obsidian_shard.png",
 })
 
-minetest.register_craftitem("default:flint", {
+minetest.register_craftitem("ws_core:flint", {
 	description = "Flint",
-	inventory_image = "default_flint.png"
+	inventory_image = "ws_core_flint.png"
 })
